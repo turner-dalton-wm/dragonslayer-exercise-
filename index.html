@@ -1,10 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <title>Dragon Slayer</title>
 </head>
-<body>
+<body onload="run()" style="background-color: black; text-align: center;">
+<canvas id="canvas" width="800" height="640" style="border:solid;"></canvas>
+<script>
+    //Get canvas element from DOM
+    var canvas = document.getElementById("canvas");
+    //Define context object from canvas
+    var context = canvas.getContext("2d");
 
+    //Define player object
+    var player = {
+        name: "",
+        health: 10,
+        sprite: new Image()
+    };
+    //Retrieve player image
+    player.sprite.src = "http://stanlemmens.nl/wp/wp-content/uploads/2014/07/bill-gates-wealthiest-person.jpg";
+
+    //Define dragon object
+    var dragon = {
+        health: 10,
+        sprite: new Image()
+    };
+    //Retrieve dragon image
+    dragon.sprite.src = "http://pre10.deviantart.net/3b1d/th/pre/i/2011/345/9/f/dragon_profile_by_sn__art-d4irtki.png";
+
+    //Calls run() on body.onload()
+    function run() {
+        //Define player name
+        player.name = prompt("ENTER YOUR NAME:").toUpperCase();
+        //Draw to canvas
+        render();
+        //Init chance and slaying for the while loop
+        var chance = Math.floor(Math.random() * 2);
+        var slaying = true;
+        while (slaying) {
+            //If chance is 1; attack dragon; else dragon attacks player
+            if (chance) {
+                //Generate random damage
+                var damage = Math.floor(Math.random() * 4 + 1);
+                //Subtract damage from health
+                dragon.health -= damage;
+                alert("You hit the dragon and did " + damage + " damage!");
+                //If dragon is dead; exit the while loop; else generate new random chance for next round
+                if (dragon.health <= 0) {
+                    alert("You did it! You slew the dragon!");
+                    slaying = false;
+                } else {
+                    chance = Math.floor(Math.random() * 2);
+                }
+            } else {
+                //Subtract 3 damage from health
+                player.health -= 3;
+                alert("The dragon hits you!");
+                //If player is dead; exit the while loop
+                if (player.health <= 0) {
+                    alert("You dead!")
+                    slaying = false;
+                }
+                chance = Math.floor(Math.random() * 2);
+            }
+            //Draw to canvas
+            render();
+        }
+    }
+
+    function render() {
+        //Draw black background
+        context.fillStyle = "black";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        //Draw health bars
+        context.fillStyle = "gray";
+        context.fillRect(4, 4, 200, 10);
+        context.fillRect(canvas.width - 204, 4, 200, 10);
+        context.fillStyle = "red";
+        context.fillRect(4, 4, Math.max(player.health * 20, 0), 10);
+        context.fillRect(canvas.width - 4 - Math.max(dragon.health * 20, 0), 4, Math.max(dragon.health * 20, 0), 10);
+        //Draw character sprites
+        context.drawImage(player.sprite, 4, 18, 128, 128);
+        context.drawImage(dragon.sprite, canvas.width - 132, 18, 128, 128);
+        //Draw character names
+        context.fillStyle = "white";
+        context.fillText(player.name, 4, 150);
+        context.fillText("DRAGON", canvas.width - 132, 150);
+    }
+</script>
 </body>
 </html>
