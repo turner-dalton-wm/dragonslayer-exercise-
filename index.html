@@ -10,7 +10,7 @@
     var canvas = document.getElementById("canvas");
     //Define context object from canvas
     var context = canvas.getContext("2d");
-    
+
     //Define player object
     var player = {
         name: "",
@@ -39,7 +39,7 @@
         var slaying = true;
         while (slaying) {
             //If chance is 1; attack dragon; else dragon attacks player
-            if (chance) {
+            if(chance) {
                 //Generate random damage
                 var damage = Math.floor(Math.random() * 4 + 1);
                 //Subtract damage from health
@@ -58,7 +58,14 @@
                 alert("The dragon hits you!");
                 //If player is dead; exit the while loop
                 if (player.health <= 0) {
-                    alert("You dead!")
+                    switch(player.name) {
+                        case "CHU":
+                            alert("CHU HAS LOST");
+                            break;
+                        default:
+                            alert("You dead!");
+                            break;
+                    }
                     slaying = false;
                 }
                 chance = Math.floor(Math.random() * 2);
